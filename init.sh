@@ -4,8 +4,8 @@
 apt-get update
 apt-get upgrade -y
 
-# Install ufw if not already installed
-apt install ufw -y
+# Install ufw and lxd
+apt install ufw lxd -y
 
 # Allow SSH connections
 sudo ufw allow ssh
@@ -26,3 +26,10 @@ sudo ufw reload
 
 # Print the current status and rules
 sudo ufw status verbose
+
+# Print LXD network status
+echo "LXD network configuration:"
+lxc network list
+
+# Prompt for manual LXD initialization
+echo "LXD is installed but not yet initialized. Please run 'lxd init' to configure LXD."
