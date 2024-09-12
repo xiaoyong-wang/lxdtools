@@ -5,7 +5,8 @@ apt-get update
 apt-get upgrade -y
 
 # Install ufw and lxd
-apt install ufw lxd -y
+apt install ufw -y
+snap install lxd
 
 # Allow SSH connections
 sudo ufw allow ssh
