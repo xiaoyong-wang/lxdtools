@@ -13,12 +13,32 @@ list_rules() {
 
 # Function to add a new port forwarding rule
 add_rule() {
-    local src_port="$1"
-    local dest_ip="$2"
-    local dest_port="$3"
+    local src_port
+    local dest_ip
+    local dest_port
+
+    # Prompt user for inputs if not provided as arguments
+    if [[ -z "$1" ]]; then
+        read -p "Enter source port: " src_port
+    else
+        src_port="$1"
+    fi
     
+    if [[ -z "$2" ]]; then
+        read -p "Enter destination IP: " dest_ip
+    else
+        dest_ip="$2"
+    fi
+    
+    if [[ -z "$3" ]]; then
+        read -p "Enter destination port: " dest_port
+    else
+        dest_port="$3"
+    fi
+
+    # Validate inputs
     if [[ -z "$src_port" || -z "$dest_ip" || -z "$dest_port" ]]; then
-        echo "Usage: add_rule <src_port> <dest_ip> <dest_port>"
+        echo "Error: Missing arguments. Please provide source port, destination IP, and destination port."
         return 1
     fi
     
@@ -34,12 +54,32 @@ add_rule() {
 
 # Function to delete an existing port forwarding rule
 delete_rule() {
-    local src_port="$1"
-    local dest_ip="$2"
-    local dest_port="$3"
+    local src_port
+    local dest_ip
+    local dest_port
+
+    # Prompt user for inputs if not provided as arguments
+    if [[ -z "$1" ]]; then
+        read -p "Enter source port: " src_port
+    else
+        src_port="$1"
+    fi
     
+    if [[ -z "$2" ]]; then
+        read -p "Enter destination IP: " dest_ip
+    else
+        dest_ip="$2"
+    fi
+    
+    if [[ -z "$3" ]]; then
+        read -p "Enter destination port: " dest_port
+    else
+        dest_port="$3"
+    fi
+
+    # Validate inputs
     if [[ -z "$src_port" || -z "$dest_ip" || -z "$dest_port" ]]; then
-        echo "Usage: delete_rule <src_port> <dest_ip> <dest_port>"
+        echo "Error: Missing arguments. Please provide source port, destination IP, and destination port."
         return 1
     fi
     
@@ -69,6 +109,18 @@ save_rules() {
     echo "Iptables rules saved to $IPTABLES_RULES_FILE"
 }
 
+# Function to display help message
+show_help() {
+    echo "Usage: $0 {list|add|delete|history|save|help}"
+    echo
+    echo "list      - List current port forwarding rules"
+    echo "add       - Add a new port forwarding rule"
+    echo "delete    - Delete an existing port forwarding rule"
+    echo "history   - Show the history of port forwarding rules"
+    echo "save      - Save current iptables rules"
+    echo "help      - Show this help message"
+}
+
 # Main script logic
 case "$1" in
     list)
@@ -86,8 +138,12 @@ case "$1" in
     save)
         save_rules
         ;;
+    help)
+        show_help
+        ;;
     *)
-        echo "Usage: $0 {list|add|delete|history|save}"
+        echo "Error: Invalid option."
+        show_help
         exit 1
         ;;
 esac
